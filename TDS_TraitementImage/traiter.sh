@@ -1,5 +1,7 @@
 #!/bin/bash
 
+hostname=$(uname -n)
+
 while true
 do
 	# GENERER LA DATE	
@@ -10,8 +12,8 @@ do
 	# GENERATION DU NUMERO DE COMPTEUR
 	tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 6;
 
-	# NOTER LE NOM DU LOCATAIRE	
-	echo " Philippe" >> output-$DATE.txt
+	# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
+	echo " $hostname" >> output-$DATE.txt
 	# NOTER LA DATE-HEURE DE LA PRISE
 	echo " $DATE" >> output-$DATE.txt
 
@@ -33,5 +35,5 @@ do
 	mv out-$DATE.tif Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
-	sleep 60
+	sleep 10
 done
