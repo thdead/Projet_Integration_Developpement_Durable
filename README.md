@@ -8,3 +8,5 @@ Nous défendons ici le "Groupe 7".
 En partenariat avec "La maison du développement durable de Louvain-la-Neuve".            
 
 
+
+Notre projet se base principalement sur le monitoring des consommations électriques.
