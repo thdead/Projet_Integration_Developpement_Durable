@@ -8,7 +8,7 @@ do
 	DATE=$(date +%d-%m-%Y-%H-%M)
 
 	# CONVERTIR L'IMAGE EN IMAGE TRAITABLE
-	convert imageATraiter.tif -resize 2000 -threshold 90% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	convert test.jpg -resize 2000 -threshold 90% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 	# GENERATION DU NUMERO DE COMPTEUR
 	tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 6;
 
