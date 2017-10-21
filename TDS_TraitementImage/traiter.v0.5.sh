@@ -7,7 +7,7 @@
 #   LAGACHE Jordan, MEYER Nathan, EEROLA Juhani, MUTEBA Jean-Luc, RENARD Arnaud
 #
 #
-# Dans le cadre du Projet d'intégration organisé par l'EPHEC-Louvain-la-Neuve
+# Dans le cadre du Projet d intégration organisé par l EPHEC-Louvain-la-Neuve
 # 	et réalisé par des élèves de 3e BAC
 #
 #
@@ -19,94 +19,36 @@
 # 
 #
 
-#
+
+# VERIFICATION SYSTEME A JOUR
+apt-get -y update
+apt-get upgrade -y
+
+
 # VERIFICATION ET INSTALLATION DU DRIVER MYSQL
-#
-PKG_MYSQL=$(dpkg-query -l mysql-server)
-MYSQL_OK=$(echo $?)
+apt-get install -y mysql-server
 
-if [ "$MYSQL_OK" = "0" ]
-then 
-	echo "OK - Le driver MYSQL-SERVER est correctement installé"
-else
-	echo "NOK - Il faut installer le driver MYSQL-SERVER"
-	apt-get install -y mysql-server
-fi
-
-
-#
 # VERIFICATION ET INSTALLATION DU DRIVER TESSERACT-OCR
-#
-PKG_TESSERACT=$(dpkg-query -l tesseract-ocr)
-TESSERACT_OK=$(echo $?)
+apt-get install -y tesseract-ocr
 
-if [ "$TESSERACT_OK" = "0" ]
-then 
-	echo "OK - Le driver TESSERACT-OCR est correctement installé"
-else
-	echo "NOK - Il faut installer le driver TESSERACT-OCR"
-	apt-get install -y tesseract-ocr
-fi
-
-
-#
 # VERIFICATION ET INSTALLATION DU DRIVER CONVERT (ImageMagick)
-#
-PKG_CONVERT=$(dpkg-query -l imagemagick)
-CONVERT_OK=$(echo $?)
+apt-get install -y imagemagick
 
-if [ "$CONVERT_OK" = "0" ]
-then 
-	echo "OK - Le driver IMAGEMAGICK est correctement installé"
-else
-	echo "NOK - Il faut installer le driver IMAGEMAGICK"
-	apt-get install -y imagemagick
-fi
-
-
-#
 # VERIFICATION ET INSTALLATION DU DRIVER FSWEBCAM
-#
-PKG_FSWEBCAM=$(dpkg-query -l fswebcam)
-FSWEBCAM_OK=$(echo $?)
+apt-get install -y fswebcam
 
-if [ "$FSWEBCAM_OK" = "0" ]
-then 
-	echo "OK - Le driver FSWEBCAM est correctement installé"
-else
-	echo "NOK - Il faut installer le driver FSWEBCAM"
-	apt-get install -y fswebcam
-fi
-
-
-#
 # VERIFICATION ET INSTALLATION DU DRIVER POUR LE SCRIPT DE DECOUPAGE
-#
-PKG_SCIPY=$(dpkg-query -l python-scipy)
-SCIPY_OK=$(echo $?)
+apt-get install -y python-scipy
 
-if [ "$SCIPY_OK" = "0" ]
-then 
-	echo "OK - Le driver PYTHON_SCIPY est correctement installé"
-else
-	echo "NOK - Il faut installer le driver PYTHON_SCIPY"
-	apt-get install -y python-scipy
-fi
-
-
-#
 # VERIFICATION ET INSTALLATION DU DRIVER POUR LE SCRIPT DE DECOUPAGE
-#
-PKG_IMAGING=$(dpkg-query -l python-imaging)
-IMAGING_OK=$(echo $?)
+apt-get install -y python-imaging
 
-if [ "$IMAGING_OK" = "0" ]
-then 
-	echo "OK - Le driver PYTHON_IMAGING est correctement installé"
-else
-	echo "NOK - Il faut installer le driver PYTHON_IMAGING"
-	apt-get install -y python-imaging
-fi
+# VERIFICATION ET INSTALLATION DU DRIVER CV2
+apt-get install -y python-opencv
+
+# MISE A NIVEAU DU SYSTEME
+apt-get -y update
+apt-get -y upgrade
 
 
 # LE NOM DE LA MACHINE = LE NOM DU CLIENT
