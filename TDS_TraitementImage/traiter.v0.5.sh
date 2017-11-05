@@ -100,8 +100,8 @@ do
 	# ??????????????? QUID DE LA BDD VPS ???????????????
 	inputfile="output-$DATE.txt"
 	cat $inputfile | while read compteur nom heure; do
-		echo "INSERT INTO Relevé (value, user, time, picture) VALUES ('$compteur', '$nom', '$heure', '$imageATraiter');"
-	done | mysql -h 137.74.172.37 -ujon -proot test;
+		echo "INSERT INTO Control (value, user, time, picture) VALUES ('$compteur', '$nom', '$heure', '$imageATraiter');"
+	done | mysql -h 137.74.172.37 -ujon -proot emonitor;
 
 	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
 	mv output-$DATE.txt Archives/$DATE.txt

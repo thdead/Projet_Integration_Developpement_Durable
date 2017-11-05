@@ -157,8 +157,8 @@ do
 	# ??????????????? QUID DE LA BDD VPS ???????????????
 	inputfile="output-$DATE.txt"
 	cat $inputfile | while read compteur nom heure; do
-		echo "INSERT INTO test (compteur, nom, heure) VALUES ('$compteur', '$nom', '$heure');"
-	done | mysql -uroot -ptest test;
+		echo "INSERT INTO Relevé (value, user, time) VALUES ('$compteur', '$nom', '$heure');"
+	done | mysql -h 137.74.172.37 -ujon -proot test;
 
 	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
 	mv output-$DATE.txt Archives/$DATE.txt

@@ -128,6 +128,7 @@ do
 
 	# Second essai avec crop.py et erreur = 0
 	./crop_morphology.py test.jpg
+	imageATraiter=$(base64 test.crop.png)
 	convert test.crop.png -resize 2000 -threshold 33% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 
@@ -157,7 +158,7 @@ do
 	# ??????????????? QUID DE LA BDD VPS ???????????????
 	inputfile="output-$DATE.txt"
 	cat $inputfile | while read compteur nom heure; do
-		echo "INSERT INTO Relevé (value, user, time) VALUES ('$compteur', '$nom', '$heure');"
+		echo "INSERT INTO Relevé (value, user, time, picture) VALUES ('$compteur', '$nom', '$heure', '$imageATraiter');"
 	done | mysql -h 137.74.172.37 -ujon -proot test;
 
 	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
