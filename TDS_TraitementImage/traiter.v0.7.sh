@@ -51,7 +51,7 @@ apt-get -y update
 apt-get -y upgrade
 
 
-# LE NOM DE LA MACHINE = LE NOM DU CLIENT AVEC UN "-" ENTRE NOM ET PRENOM
+# LE NOM DANS FICHIER nomClient.txt = LE NOM DU CLIENT AVEC UN "-" ENTRE NOM ET PRENOM
 # EXEMPLE : Philippe-Lemaitre / Jean.Luc-Muteba
 # hostname=$(uname -n)
 hostname=$(cat nomClient.txt)
@@ -82,9 +82,14 @@ do
 	# convert imageATraiter.tif -resize 2000 -threshold 90% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 	# Second essai avec crop.py et erreur = 0
-	./crop_morphology.py test.jpg
-	imageATraiter=$(base64 test.crop.png)
-	convert test.crop.png -resize 2000 -threshold 33% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	# ./crop_morphology.py test.jpg
+	# imageATraiter=$(base64 test.crop.png)
+	# convert test.crop.png -resize 2000 -threshold 33% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+
+	# Troisième essai avec ImageMagick
+	convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
+	imageATraiter=$(base64 reel8.cropMagick.jpg)
+	convert reel8.cropMagick.jpg -resize 2000 -threshold 55% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
@@ -92,6 +97,9 @@ do
 	# tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 6;
 
 	# Second essai avec erreur = 0
+	# tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
+
+	# Troisième essai avec ImageMagick
 	tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
 
 	rmSpaceOutput=$(cat output-$DATE.txt | tr -d ' ')
