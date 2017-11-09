@@ -87,8 +87,8 @@ do
 	# convert test.crop.png -resize 2000 -threshold 33% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 	# Troisième essai avec ImageMagick
-	# OKKKKKK !!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
-	convert reel4.jpg -crop 1400x260+494+1397 reel4.cropMagick.jpg
+	convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
+	# convert reel4.jpg -crop 1400x260+494+1397 reel4.cropMagick.jpg
 	imageATraiter=$(base64 reel8.cropMagick.jpg)
 	convert reel8.cropMagick.jpg -resize 2000 -threshold 55% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
