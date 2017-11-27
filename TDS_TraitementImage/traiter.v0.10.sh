@@ -91,7 +91,7 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert captureWebcam.jpg -crop 352x150+0+100 captureWebcamCrop.jpg
 	imageATraiter=$(base64 captureWebcamCrop.jpg)
-	convert captureWebcamCrop.jpg -resize 2000 -threshold 10% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	convert captureWebcamCrop.jpg -resize 2000 -monochrome -threshold 75% -density 300 -depth 8 -negate out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
