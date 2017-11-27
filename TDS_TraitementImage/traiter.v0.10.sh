@@ -53,7 +53,7 @@ apt-get -y upgrade
 # LE NOM DANS FICHIER nomClient.txt = LE NOM DU CLIENT AVEC UN "-" ENTRE NOM ET PRENOM
 # EXEMPLE : Philippe-Lemaitre / Jean.Luc-Muteba
 # hostname=$(uname -n)
-hostname=$(cat nomClient.txt)
+hostname=$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/nomClient.txt)
 hostnameSplit=(${hostname//&/ })
 firstname=$(echo "${hostnameSplit[0]}")
 lastname=$(echo "${hostnameSplit[1]}")
@@ -75,7 +75,7 @@ do
 	# GENERER LA DATE	
 	DATE=$(date +%d-%m-%Y-%H-%M)
 	
-	fswebcam captureWebcam.jpg
+	fswebcam /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg
 
 
 	# CONVERTIR L'IMAGE EN IMAGE TRAITABLE
@@ -89,9 +89,9 @@ do
 
 	# Troisième essai avec ImageMagick
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
-	convert captureWebcam.jpg -crop 352x150+0+100 captureWebcamCrop.jpg
-	imageATraiter=$(base64 captureWebcamCrop.jpg)
-	convert captureWebcamCrop.jpg -resize 2000 -monochrome -threshold 75% -density 300 -depth 8 -negate out-$DATE.tif
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg -crop 352x150+0+100 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
+	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 2000 -monochrome -threshold 75% -density 300 -depth 8 -negate /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
@@ -102,33 +102,33 @@ do
 	# tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
 
 	# Troisième essai avec ImageMagick
-	tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
+	tesseract /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
 
-	rmSpaceOutput=$(cat output-$DATE.txt | tr -d ' ')
-	echo "$rmSpaceOutput" > output-$DATE.txt
+	rmSpaceOutput=$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt | tr -d ' ')
+	echo "$rmSpaceOutput" > /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 	
 
 	# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
-	echo " $hostname" >> output-$DATE.txt
+	echo " $hostname" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 	# NOTER LA DATE-HEURE DE LA PRISE
-	echo " $DATE" >> output-$DATE.txt
+	echo " $DATE" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 
 	# GESTION DES ESPACES INUTILES / FACILITER POUR INSERT BDD
-	contenuFichier="$(cat output-$DATE.txt)"
+	contenuFichier="$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt)"
 	contenuFichierSansEspaces="$(echo -e $contenuFichier | tr -d '\v')"
-	echo $contenuFichierSansEspaces > output-$DATE.txt
-	cat output-$DATE.txt
+	echo $contenuFichierSansEspaces > /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+	cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 
 	# INSERTION DES DONNEES DANS LA BDD
-	inputfile="output-$DATE.txt"
-	cat $inputfile >> "backupFile.txt"
+	inputfile="/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt"
+	cat $inputfile >> "/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/backupFile.txt"
 	cat $inputfile | while read compteur nom heure; do
 		echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
 	done | mysql -h 137.74.172.37 -ujon -proot emonitor;
 
 	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
-	mv output-$DATE.txt Archives/$DATE.txt
-	mv out-$DATE.tif Archives/$DATE.tif
+	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.txt
+	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
 	read -t 5 -p "\nContinuer ou stopper ? "
