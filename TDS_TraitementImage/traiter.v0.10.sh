@@ -91,7 +91,7 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert captureWebcam.jpg -crop 352x150+0+100 captureWebcamCrop.jpg
 	imageATraiter=$(base64 captureWebcamCrop.jpg)
-	convert captureWebcamCrop.jpg -resize 2000 -threshold 55% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	convert captureWebcamCrop.jpg -resize 2000 -threshold 33% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
@@ -121,6 +121,7 @@ do
 
 	# INSERTION DES DONNEES DANS LA BDD
 	inputfile="output-$DATE.txt"
+	cat $inputfile >> "backupFile.txt"
 	cat $inputfile | while read compteur nom heure; do
 		echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
 	done | mysql -h 137.74.172.37 -ujon -proot emonitor;
@@ -130,7 +131,7 @@ do
 	mv out-$DATE.tif Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
-	read -t 60 -p "\nContinuer ou stopper ? "
+	read -t 5 -p "\nContinuer ou stopper ? "
 	
 	#
 done
