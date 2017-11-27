@@ -89,7 +89,7 @@ do
 
 	# Troisième essai avec ImageMagick
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
-	convert captureWebcam.jpg -crop 1600x270+260+1290 captureWebcamCrop.jpg
+	convert captureWebcam.jpg -crop 352x150+0+100 captureWebcamCrop.jpg
 	imageATraiter=$(base64 captureWebcamCrop.jpg)
 	convert captureWebcamCrop.jpg -resize 2000 -threshold 55% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
@@ -130,6 +130,7 @@ do
 	mv out-$DATE.tif Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
-	sleep 60
+	read -t 60 -p "\nContinuer ou stopper ? "
+	
 	#
 done
