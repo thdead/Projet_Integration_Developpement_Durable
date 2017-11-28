@@ -77,7 +77,6 @@ do
 	
 	fswebcam /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg
 
-
 	# CONVERTIR L'IMAGE EN IMAGE TRAITABLE
 	# Premier essai fonctionnel avec erreur = 1
 	# convert imageATraiter.tif -resize 2000 -threshold 90% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
@@ -131,7 +130,11 @@ do
 	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
-	read -t 5 -p "\nContinuer ou stopper ? "
-	
+	read -t 5 -p "\nStopper le logiciel ? " -e -i "1" RDVALUE
+	if [ $RDVALUE = "1" ]
+	then 
+		echo "Logiciel quitté"
+		exit 0
+	fi
 	#
 done
