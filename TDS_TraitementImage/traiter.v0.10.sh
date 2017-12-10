@@ -88,9 +88,9 @@ do
 
 	# Troisième essai avec ImageMagick
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
-	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg -crop 1135x189+33+239 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
 	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
-	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 2000 -threshold 75% -density 300 -depth 8 -negate /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 300 -threshold 33% -density 300 -depth 8 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
