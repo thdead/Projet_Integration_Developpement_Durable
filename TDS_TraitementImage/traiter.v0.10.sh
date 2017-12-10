@@ -130,7 +130,7 @@ do
 	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.tif
 
 	# RELANCER LA PRISE TOUTES LES MINUTES
-	read -t 5 -p "\nStopper le logiciel ? " -e -i "1" RDVALUE
+	read -t 60 -p "\nStopper le logiciel ? " -e -i "1" RDVALUE
 	if [ $RDVALUE = "1" ]
 	then 
 		echo "Logiciel quitté"
