@@ -75,7 +75,7 @@ do
 	# GENERER LA DATE	
 	DATE=$(date +%d-%m-%Y-%H-%M)
 	
-	fswebcam /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg
+	fswebcam -r 1280x720 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg
 
 	# CONVERTIR L'IMAGE EN IMAGE TRAITABLE
 	# Premier essai fonctionnel avec erreur = 1
@@ -90,7 +90,7 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg -crop 352x150+0+100 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
 	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
-	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 2000 -monochrome -threshold 75% -density 300 -depth 8 -negate /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 2000 -threshold 75% -density 300 -depth 8 -negate /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR

@@ -63,7 +63,7 @@ echo $lastname
 meter_id=$(mysql -h 137.74.172.37 -ujon -proot emonitor -se "CALL findMeterIdFromName('$firstname', '$lastname')")
 echo "Meter ID = ----------------->   $meter_id"
 
-module_id=$(mysql -h 137.74.172.37 -ujon -proot emonitor -se "CALL findModuleIdFromMeterId($meter_id)")
+module_id=$(mysql -h 137.74.172.37 -ujon -proot emonitor -se "CALL findModuleIdFromMeterId ($meter_id)")
 echo "Module ID = ----------------->   $module_id"
 
 
