@@ -1,0 +1,11 @@
+<?php?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TITRE</title>
+  <?php include('includes/head.php'); ?>
+</head>
+<body>
+  <?php include('includes/navbar.php'); ?>
+</body>
+</html>
