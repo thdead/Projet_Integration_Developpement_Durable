@@ -89,7 +89,9 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert reel9.jpg -crop 1600x270+260+1290 reel9.cropMagick.jpg
 	imageATraiter=$(base64 reel9.cropMagick.jpg)
-	# convert reel9.cropMagick.jpg -resize 2000 -threshold 55% -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	convert reel9.cropMagick.jpg -resize 300 -colorspace Gray -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+
+	./otsuthresh out-$DATE.tif out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
@@ -100,7 +102,7 @@ do
 	# tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
 
 	# Troisième essai avec ImageMagick
-	tesseract reel9.cropMagick.jpg output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
+	tesseract out-$DATE.tif output-$DATE -c tessedit_char_whitelist=0123456789 -psm 12;
 
 	rmSpaceOutput=$(cat output-$DATE.txt | tr -d ' ')
 	echo "$rmSpaceOutput" > output-$DATE.txt
