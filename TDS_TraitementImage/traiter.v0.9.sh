@@ -17,6 +17,8 @@
 # crop.morphology.py
 # https://github.com/danvk/oldnyc/blob/master/ocr/tess/crop_morphology.py
 # 
+# otsuthresh.py
+# http://www.fmwconcepts.com/imagemagick/otsuthresh/
 #
 
 # VERIFICATION SYSTEME A JOUR
@@ -66,6 +68,8 @@ echo "Meter ID = ----------------->   $meter_id"
 module_id=$(mysql -h 137.74.172.37 -ujon -proot emonitor -se "CALL findModuleIdFromMeterId ($meter_id)")
 echo "Module ID = ----------------->   $module_id"
 
+valeurPrecedente=0
+valeurEcartMax=10
 
 #
 # BOUCLE DE TRAITEMENT
@@ -87,12 +91,14 @@ do
 
 	# Troisième essai avec ImageMagick
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
-	convert reel9.jpg -crop 1600x270+260+1290 reel9.cropMagick.jpg
-	imageATraiter=$(base64 reel9.cropMagick.jpg)
-	convert reel9.cropMagick.jpg -resize 300 -colorspace Gray -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	# convert reel9.jpg -crop 1600x270+260+1290 reel9.cropMagick.jpg
+	convert captureWebcam.jpg -crop 1135x189+33+239 captureWebcamCrop.jpg	
+	# imageATraiter=$(base64 reel9.cropMagick.jpg)
+	imageATraiter=$(base64 captureWebcamCrop.jpg)
+	# convert reel9.cropMagick.jpg -resize 300 -colorspace Gray -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
+	convert captureWebcamCrop.jpg -resize 300 -colorspace Gray -density 300 -depth 8 -negate -strip -background white -alpha off out-$DATE.tif
 
 	./otsuthresh out-$DATE.tif out-$DATE.tif
-
 
 	# GENERATION DU NUMERO DE COMPTEUR
 	# Premier essai fonctionnel
@@ -106,30 +112,50 @@ do
 
 	rmSpaceOutput=$(cat output-$DATE.txt | tr -d ' ')
 	echo "$rmSpaceOutput" > output-$DATE.txt
-	
 
-	# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
-	echo " $hostname" >> output-$DATE.txt
-	# NOTER LA DATE-HEURE DE LA PRISE
-	echo " $DATE" >> output-$DATE.txt
+	# Pour la comparaison de la valeur actuelle avec le précédent	
+	valeurActuelle=$(cat output-$DATE.txt)	
+	echo "Valeur précédente = ----------------->   $valeurPrecedente"	
+	echo "Valeur actuelle = ----------------->   $valeurActuelle"
 
-	# GESTION DES ESPACES INUTILES / FACILITER POUR INSERT BDD
-	contenuFichier="$(cat output-$DATE.txt)"
-	contenuFichierSansEspaces="$(echo -e $contenuFichier | tr -d '\v')"
-	echo $contenuFichierSansEspaces > output-$DATE.txt
-	cat output-$DATE.txt
 
-	# INSERTION DES DONNEES DANS LA BDD
-	inputfile="output-$DATE.txt"
-	cat $inputfile | while read compteur nom heure; do
-		echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
-	done | mysql -h 137.74.172.37 -ujon -proot emonitor;
+	if [ "$valeurActuelle" -gt "$valeurPrecedente" ]
+	then		
+		if [ $((valeurPrecedente + valeurEcartMax)) -lt "$valeurActuelle" ]
+		then 
+			# REMPLACER LA VALEUR PRECEDENTE PAR L'ACTUELLE
+			valeurPrecedente=$valeurActuelle
 
-	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
-	mv output-$DATE.txt Archives/$DATE.txt
-	mv out-$DATE.tif Archives/$DATE.tif
+			# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
+			echo " $hostname" >> output-$DATE.txt
+			# NOTER LA DATE-HEURE DE LA PRISE
+			echo " $DATE" >> output-$DATE.txt
 
-	# RELANCER LA PRISE TOUTES LES MINUTES
-	sleep 60
-	#
+			# GESTION DES ESPACES INUTILES / FACILITER POUR INSERT BDD
+			contenuFichier="$(cat output-$DATE.txt)"
+			contenuFichierSansEspaces="$(echo -e $contenuFichier | tr -d '\v')"
+			echo $contenuFichierSansEspaces > output-$DATE.txt
+			cat output-$DATE.txt
+
+			# INSERTION DES DONNEES DANS LA BDD
+			inputfile="output-$DATE.txt"
+			cat $inputfile | while read compteur nom heure; do
+				echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
+			done | mysql -h 137.74.172.37 -ujon -proot emonitor;
+
+			# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
+			mv output-$DATE.txt Archives/$DATE.txt
+			mv out-$DATE.tif Archives/$DATE.tif
+
+			# RELANCER LA PRISE UNE MINUTE APRES
+			sleep 60
+		else
+			# RELANCER LA CAPTURE			
+			echo "C'EST PAS POSSIBLE"
+			sleep 5		
+		fi
+	else	
+		# RELANCER LA CAPTURE	
+		sleep 5	
+	fi
 done
