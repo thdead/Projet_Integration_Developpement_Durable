@@ -7,12 +7,12 @@
                       <i class="fa fa-bolt" aria-hidden="true"></i> <span class="menu-item"> Dashboard Electricité</span>
                   </li>
               </a>
-              <a >
+              <a href="dashboardEau.php">
                   <li>
                       <i class="fa fa-tint" aria-hidden="true"></i> <span class="menu-item"> Dashboard Eau</span>
                   </li>
               </a>
-              <a >
+              <a href="dashboardGaz.php">
                   <li>
                       <i class="fa fa-fire" aria-hidden="true"></i> <span class="menu-item"> Dashboard Gaz</span>
                   </li>

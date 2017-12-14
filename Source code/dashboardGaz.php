@@ -39,23 +39,23 @@ require 'mysql/connect.php';
         $defRes = getLastR_id($_SESSION['user']['id']);
         ?>
         <div class="alert alert-warning">
-            <h6 class="alert alert-heading">Résidence par défaut non définie.</h6>
-            <p>Vous ne possédez pas de résidence par défaut.
-                <a href=#>Définir votre résidence par défaut.</a>
+            <h6 class="alert alert-heading">Residence par defaut non definie.</h6>
+            <p>Vous ne possedez pas de residence par defaut.
+                <a href=#>Definir votre residence par defaut.</a>
             </p>
         </div>
         <?php
     }
-    $mid = getMeterEau('',$defRes);
-    if(hasDataEau($defRes)){
-        $liste = getDataEau($defRes,1);
-        $liste2 = getDataEau($defRes,2);
+    $mid = getMeterGaz('',$defRes);
+    if(hasDataGaz($defRes)){
+        $liste = getDataGaz($defRes,1);
+        $liste2 = getDataGaz($defRes,2);
     }else{
         $residence = getResidenceDetails($defRes);
         ?>
         <div class="alert alert-danger">
-            <h6 class="alert alert-heading">Aucune données disponibles...</h6>
-            <p>Votre résidence à l'adresse <i><?= $residence[0]['L_address'] ?></i> ne contient aucune données.</p>
+            <h6 class="alert alert-heading">Aucune donnees disponibles...</h6>
+            <p>Votre residence a l'adresse <i><?= $residence[0]['L_address'] ?></i> ne contient aucune donnees.</p>
         </div>
         <?php die();
     }
@@ -75,7 +75,7 @@ require 'mysql/connect.php';
             for ( var i = 1; i < (dataListe.length-1); i++ ) {
                 var date = dataListe[i][1].split("-");
                 var newDate = new Date(date[2],date[1]-1,date[0],date[3],date[4]);
-                var value = dataListe[i][0]-dataListe[i-1][0];
+                var value = (dataListe[i][0]-dataListe[i-1][0])/1000;
 
                 chartData.push( {
                     "date": newDate,
@@ -162,7 +162,7 @@ require 'mysql/connect.php';
                 sqlcom += "UPDATE Console SET Con_alert=1 WHERE Con_id=" + DAT[key]["Con_id"] +";";
             }
             if(DAT[key]["Con_alert"] == 1 && DAT[key]["Con_used"] == 0){
-                notifyMe("Attention, consommation de " + DAT[key]["diff"] + "litres le " + DAT[key]["Con_time"] + ".");
+                notifyMe("Attention, consommation de " + DAT[key]["diff"] + "kwh le " + DAT[key]["Con_time"] + ".");
                 DAT[key]["Con_used"] = 1;
                 sqlcom += "UPDATE Console SET Con_used=1 WHERE Con_id=" + DAT[key]["Con_id"] +";";
             }
@@ -201,7 +201,7 @@ require 'mysql/connect.php';
 
 <!-- JS & JQUERRY & JS BOOTSTRAP -->
 
-<script src="js/chartTestEau.js"></script>
+<script src="js/chartTestGaz.js"></script>
 
 <script src="js/jquerry/jquery.min.js"></script>
 <script src="js/jquerry/popper.js"></script>

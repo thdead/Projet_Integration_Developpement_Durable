@@ -1,5 +1,5 @@
 /**
- * Created by Nathan on 22/11/2017.
+ * Created by Nathan on 22/11/2017 & Juhani.
  */
 
 
@@ -13,12 +13,12 @@ var chart = AmCharts.makeChart( "chartdiv", {
         "minPeriod": "mm"
     },
     "titles": [{
-            "text": "Consommation électrique du ménage kwh",
+            "text": "Consommation electrique du menage kwh",
             "size": 15
         }
     ],
     "dataSets": [{
-        "color": "#5cb85c",
+        "color": "#c6bb1f",
         "dataProvider": chartData,
         "fieldMappings": [{
             "fromField": "kw",
@@ -116,14 +116,14 @@ function moyenneEnCours() {
         }
         dateStartOld = dateGraph[0].value;
         dateEndOld = dateGraph[1].value;
-        document.getElementsByClassName("dataDashboard")[1].innerHTML = "<h3>Consommation totale</h3><h5>sur la période sélectionnée :</h5><h1>" + consomationTotPeriode + "kwh</h1>";
+        document.getElementsByClassName("dataDashboard")[1].innerHTML = "<h3>Consommation totale</h3><h5>sur la periode selectionnee :</h5><h1>" + consomationTotPeriode + " m3</h1>";
     };
 }
 
 function ecrireDate(){
     var dateNow = new Date();
     var jours = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-    var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    var mois = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
 
     var heure = dateNow.getHours();
     var min = dateNow.getMinutes();
@@ -133,26 +133,3 @@ function ecrireDate(){
 
     document.getElementsByClassName("dataDashboard")[0].innerHTML = jours[dateNow.getDay()] + "<br> " + dateNow.getDate() + " " +  mois[dateNow.getMonth()] + " " + dateNow.getFullYear()  + "<br> " + heure +":"+min ;
 };
-
-function moyenneDernierJour() {
-
-    var dateStartDate =  new Date();
-    var dateEndDate = new Date();
-    dateEndDate.setDate(dateEndDate.getDate() - 1);
-
-    var consomationTotPeriode = 0;
-    for (var i=0; i<(chartData.length);i++){
-        if (chartData[i].date >= dateStartDate && chartData[i].date <= dateEndDate ){
-            consomationTotPeriode += chartData[i].kw;
-        }
-    }
-    console.log(consomationTotPeriode);
-
-    if (consomationTotPeriode>0){
-        document.getElementsByClassName("dataDashboard")[2].innerHTML = "Consommation totale <h5>sur les dernieres 24h :</h5><h3>" + consomationTotPeriode + "kwh</h3>";
-    } else {
-        document.getElementsByClassName("dataDashboard")[2].innerHTML = "<h3>Aucune consommation ces dernières 24h</h3>";
-    }
-};
-
-moyenneDernierJour();

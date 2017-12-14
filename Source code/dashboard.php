@@ -188,7 +188,9 @@ require 'mysql/connect.php';
                 </div>
             </div>
             <div class="data">
-                <div class="container-perso" style="background-color: #292B2C; color: #FFFFFF;"></div>
+                <div class="container-perso" style="background-color: #292B2C; color: #FFFFFF;">
+					<h3 class="dataDashboard"><h3>
+				</div>
             </div>
         </div>
     </div>

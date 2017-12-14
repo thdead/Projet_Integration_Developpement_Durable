@@ -323,6 +323,28 @@ function getMeter($rid, $type = 'Electrique'){
   $pdo=null;
   return (int)$meter_id[0];
 }
+//Nouveau  Get the water meter that match both rid and type.
+function getMeterEau($rid, $type = 'Eau'){
+  require 'mysql/connect.php';
+  $req = $pdo->prepare('SELECT Me_id FROM Meter WHERE R_id = :rid AND Me_type = :mType');
+  $req->bindValue(':rid',$rid);
+  $req->bindValue(':mType',$type);
+  $req->execute();
+  $meter_id = $req->fetch(PDO::FETCH_NUM);
+  $pdo=null;
+  return (int)$meter_id[0];
+}
+//Nouveau  Get the gaz meter that match both rid and type.
+function getMeterGaz($rid, $type = 'Gas'){
+  require 'mysql/connect.php';
+  $req = $pdo->prepare('SELECT Me_id FROM Meter WHERE R_id = :rid AND Me_type = :mType');
+  $req->bindValue(':rid',$rid);
+  $req->bindValue(':mType',$type);
+  $req->execute();
+  $meter_id = $req->fetch(PDO::FETCH_NUM);
+  $pdo=null;
+  return (int)$meter_id[0];
+}
 //Get the last residence for the user id.
 function getLastR_id($id){
   require 'mysql/connect.php';
@@ -349,9 +371,65 @@ function getData($rid,$action = '1'){
   $pdo = null;
   return $list;
 }
+//nouveau pour eau
+function getDataEau($rid,$action = '1'){
+  require 'mysql/connect.php';
+  $meter_id = getMeterEau($rid);
+  $list = null;
+  if($action == 1){
+    $data = $pdo->query('SELECT Con_measure, Con_time 
+    FROM emonitor.Control 
+    WHERE Me_id = '.$meter_id);
+  }else if($action == 2){
+    $data = $dataD = $pdo->query("SELECT Con_measure, Con_time, Con_alert, Con_used, Con_id 
+    FROM emonitor.Control 
+    WHERE Me_id = $meter_id");
+  }
+  foreach ($data as $row){
+    $list[] = $row;
+  }
+  #var_dump($list);
+  $pdo = null;
+  return $list;
+}
+//nouveau pour gaz
+function getDataGaz($rid,$action = '1'){
+  require 'mysql/connect.php';
+  $meter_id = getMeterGaz($rid);
+  $list = null;
+  if($action == 1){
+    $data = $pdo->query('SELECT Con_measure, Con_time 
+    FROM emonitor.Control 
+    WHERE Me_id = '.$meter_id);
+  }else if($action == 2){
+    $data = $dataD = $pdo->query("SELECT Con_measure, Con_time, Con_alert, Con_used, Con_id 
+    FROM emonitor.Control 
+    WHERE Me_id = $meter_id");
+  }
+  foreach ($data as $row){
+    $list[] = $row;
+  }
+  #var_dump($list);
+  $pdo = null;
+  return $list;
+}
 //Verify if the meter of the residence have data.
 function hasData($rid){
   if(!empty(getData($rid))){
+    return true;
+  }
+  return false;
+}
+//Nouveau Verify if the water meter of the residence have data.
+function hasDataEau($rid){
+  if(!empty(getDataEau($rid))){
+    return true;
+  }
+  return false;
+}
+//Nouveau Verify if the gaz meter of the residence have data.
+function hasDataGaz($rid){
+  if(!empty(getDataGaz($rid))){
     return true;
   }
   return false;

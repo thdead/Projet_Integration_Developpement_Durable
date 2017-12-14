@@ -11,7 +11,7 @@
      <div id="stage">
         <div id="stage-caption">
             <h1>Rien de plus pratique ! Installez-le et ...</h1>
-            <p>Avec E-Monitor vos factures d'électricité deviennent plus claires.</p>
+            <p>Avec E-Monitor vos factures énergétiques deviennent plus claires.</p>
             <a href="registration_form.php" class="btn btn-outline-success btn-success">S'inscrire maintenant !</a>
         </div>
     </div>
