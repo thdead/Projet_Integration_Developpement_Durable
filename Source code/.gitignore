@@ -1,0 +1,7 @@
+mysql/connect.php
+vendor/*
+amcharts/*
+font-awesome/*
+js/jquerry/*
+js/bootstrap/*
+css/bootstrap/*
