@@ -1,4 +1,7 @@
 <?php
+/**
+ * Residences are used by customers and are linked to Meters.
+ */
 class Residence{
   protected $R_residencyType;
   protected $R_nbRooms;
@@ -8,7 +11,6 @@ class Residence{
   protected $T_name;
   protected $M_zipCode;
   protected $errors;
-
 
   public function __construct(array $data){
     $this->hydrate($data);
@@ -25,6 +27,12 @@ class Residence{
       }
     }
   }
+  /**
+   * Set the residency type of a residence with the value gave.
+   * @param value, the residency type,
+   * @return error if an error occurs
+   * 
+   */
   public function setR_residencyType($value){
     if(is_string($value)){
       $value = strtolower($value);
@@ -37,6 +45,11 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the number of rooms of a residency.
+   * @param value, integer that represent the number of rooms,
+   * @return error if the value is < 1 or > 30 or not an integer
+   */
   public function setR_nbRooms($value){
     $value = (int)$value;
     if(is_int($value)){
@@ -51,6 +64,11 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the surface of a residency.
+   * @param value, the integer that represent the surface,
+   * @return error if the value is < 10 or > 300 or not an integer.
+   */
   public function setR_area($value){
     $value = (int)$value;
     if(is_int($value)){
@@ -65,6 +83,11 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the number of inhabitants of a residency.
+   * @param value, the integer that represent the number of inhabitants,
+   * @return error if the value is < 1 or > 20 or not an integer.
+   */
   public function setR_inhabitants($value){
     $value = (int)$value;
     if(is_int($value)){
@@ -79,26 +102,29 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the address of a residency.
+   * @param value, the address,
+   * @return error if address is too short, too long or invalid. 
+   */
   public function setL_address($value){
     if(is_string($value)){
-      if(strlen($value) < 5){ //KOT = 3
+      if(strlen($value) < 5){
         return 'Votre adresse est trop courte.';
       }else if(strlen($value) > 64){
         return 'Votre adresse ne peut pas faire plus de 64 caractères';
       }else{
         $this->L_address = $value;
       }
-      // else if(preg_match("/^[a-zA-Z -]+$/",$value)){
-      //   $this->L_address = $value;
-      // }
-      //Problème avec numéro de boite
-      // else{
-      //   return 'Format invalide';
-      // }
     }else{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the name of the town where the residency is located.
+   * @param value, the name of the town,
+   * @return error if the value is too short, too long or invalid.
+   */
   public function setT_name($value){
     if(is_string($value)){
       if(strlen($value) < 3){ //KOT = 3
@@ -114,6 +140,12 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the zip code of the Town where the residency is located.
+   * @param value, the integer zip code,
+   * @return error if the zipcode is not between 1000 & 9999 or if
+   * the zipcode is not an integer.
+   */
   public function setM_zipCode($value){
     $value = (int)$value;
     if(is_int($value)){
@@ -126,12 +158,16 @@ class Residence{
       return 'Format invalide';
     }
   }
+  /**
+   * Set the errors that can occurs in set* functions.
+   * @return errors, an array containing the name of the attribute
+   * aas key and the error code as value.
+   */
   public function setErrors($key,$error){
     if(is_string($key) && !empty($error)){
       $this->errors[$key] = $error;
     }
   }
-
   public function getR_residencyType(){
     return $this->R_residencyType;
   }
