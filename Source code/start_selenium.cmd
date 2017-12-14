@@ -1,0 +1,1 @@
+java -Dwebdriver.chrome.driver=C:\Users\JRDN\Downloads\chromedriver.exe -jar  selenium-server-standalone-3.7.1.jar
