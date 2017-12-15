@@ -1,6 +1,7 @@
 <?php
-//IN THIS CLASS YOU'LL FIND ALL USERS FUNCTIONS AND UTILITIES.
-//USERMANAGER IS USED FOR DATABASE CONNECTION
+/**
+ * A user is recognized by his email and can do several actions.
+ */
 class User{
   protected $id;
   protected $firstName;
@@ -15,16 +16,16 @@ class User{
   const TOO_SHORT = 1;
   const TOO_LONG = 2;
   const INVALID_FORMAT = 3;
-  /*
-  This constructor allows
+  /**
+  * This constructor allows
   */
   public function __construct(array $userData){
     $this->hydrate($userData);
   }
-  /*
-  Reads array $data, transform each key X into a $method.
-  If the method 'setX' exist, then the value of X is set to the attribute
-  that match the key.
+  /**
+  * Reads array $data, transform each key X into a $method.
+  * If the method 'setX' exist, then the value of X is set to the attribute
+  * that match the key.
   */
   public function hydrate(array $data){
     $errors = [];
@@ -38,6 +39,11 @@ class User{
         }
       }
   }
+  /**
+   * Set the errors that can occurs in set* functions.
+   * @return error, an array containing the name of the attribute
+   * aas key and the error code as value.
+   */
   public function setErrors($key,$error){
     if(is_string($key) && (($error) == self::INVALID_FORMAT ||
      ($error) == self::TOO_SHORT || ($error) == self::TOO_LONG)){
@@ -48,6 +54,11 @@ class User{
     return $this->errors;
   }
   #SETTERS
+  /**
+   * Set the id of  the users, the id must be unique and gth 0.
+   * @param value, the id of the user,
+   * @return TOO_SHORT if too short value is given.
+   */
   public function setId($value){
     $value = (int) $value;
     if($value > 0){
@@ -56,6 +67,13 @@ class User{
       return self::TOO_SHORT;
     }
   }
+  /**
+   * Set the first name of the user.
+   * @param value, the first name,
+   * @return TOO_SHORT if the value is too short,
+   * @return TOO_LONG if the value is too long,
+   * @return INVALID_FORMAT if the value is invalid.
+   */
   public function setFirstName($value){
     if(is_string($value)){
       if(strlen($value) < 2)
@@ -76,6 +94,13 @@ class User{
       return self::INVALID_FORMAT;
     }
   }
+  /**
+   * Set the last name of the user.
+   * @param value, the last name,
+   * @return TOO_SHORT if the value is too short,
+   * @return TOO_LONG if the value is too long,
+   * @return INVALID_FORMAT if the value is invalid.
+   */
   public function setLastName($value){
     if(is_string($value)){
       if(strlen($value) < 2)
@@ -96,6 +121,12 @@ class User{
       return self::INVALID_FORMAT;
     }
   }
+  /**
+   * Set the crypted password of the user.
+   * @param value, the passwor,
+   * @return TOO_SHORT if the value is too short
+   * @return TOO_LONG if the value is too long
+   */
   public function setPassword($value){
     $pwd = (string) $value;
     if(strlen($pwd) < 8){
@@ -106,15 +137,31 @@ class User{
       $this->password = password_hash($pwd, PASSWORD_BCRYPT);
     }
   }
+  /**
+   * Verify if the password in plaintext matches the hashed password.
+   * @param plaintext, the clear text password,
+   * @param hash, the hashed password,
+   * @return true, if the password match,
+   * @return false, if the password doesn't match.
+   */
   public function passwordMatch($plaintext,$hash){
     $plaintext = (string) $plaintext;
       return password_verify($plaintext,$hash);
   }
+  /**
+   * Verify if the token gave matches the instance token.
+   * @param token, the token given by user,
+   * @return true, if the token match,
+   * @return false, if the token doesn't match.
+   */
   public function tokenMatch($token){
     if(!empty($token)){
       return (bool)($token === $this->getToken());
     }
   }
+  /**
+   * Set the birthdate
+   */
   public function setBirthDate($value){
     $date = explode('-',$value);
     if(count($date) == 3){

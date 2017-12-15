@@ -160,7 +160,7 @@ class Residence{
   }
   /**
    * Set the errors that can occurs in set* functions.
-   * @return errors, an array containing the name of the attribute
+   * @return error, an array containing the name of the attribute
    * aas key and the error code as value.
    */
   public function setErrors($key,$error){
