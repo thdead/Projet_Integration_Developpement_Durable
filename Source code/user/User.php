@@ -160,7 +160,11 @@ class User{
     }
   }
   /**
-   * Set the birthdate
+   * Set the birthdate of the user, the user must be 16.
+   * @param value, the birtdate of the user,
+   * @return TOO_LONG, if the user is older than 100,
+   * @return TOO_SHORT, if the user is yunger than 16
+   * @return TOO_INVALID, if value is in invalid format
    */
   public function setBirthDate($value){
     $date = explode('-',$value);
@@ -168,7 +172,8 @@ class User{
       if(checkdate($date[1],$date[2],$date[0])){
         if($date[0] < (date('Y')-16)){
           if((date('Y')-100) <= $date[0]){
-            $correctDate = $date[0].'/'.$date[1].'/'.$date[2]; //YYYY-MM-DD
+            //YYYY-MM-DD
+            $correctDate = $date[0].'/'.$date[1].'/'.$date[2];
             $this->birthDate = $correctDate;
           }else{
             return self::TOO_LONG;
@@ -183,6 +188,11 @@ class User{
       return self::INVALID_FORMAT;
     }
   }
+  /**
+   * Set the gender of the user, eitheir male, female or other.
+   * @param value, the gender,
+   * @return INVALID_FORMAT, if the gender is not matching M, W or O.
+   */
   public function setGender($value){
     $value = strtoupper($value);
     if($value == 'M' || $value == 'W' || $value == 'O'){
@@ -191,6 +201,11 @@ class User{
       return self::INVALID_FORMAT;
     }
   }
+  /**
+   * Set the phone number of the user.
+   * @param value, the phone number,
+   * @return INVALID_FORMAT, if the phone number is invalid.
+   */
   public function setPhoneNumber($value){
     if(!empty($value)){
       if(preg_match('/^0[0-9]{3}[0-9]{6}$/', $value)){
@@ -200,6 +215,11 @@ class User{
       }
     }
   }
+  /**
+   * Set the user's email that must be a valid email address.
+   * @param value, the email address,
+   * @return INVALID_FORMAT, if the email is not valid.
+   */
   public function setEmail($value){
     if(filter_var($value, FILTER_VALIDATE_EMAIL)){
       $this->email = strtolower($value);
@@ -207,6 +227,11 @@ class User{
       return self::INVALID_FORMAT;
     }
   }
+  /**
+   * Set the user's token. This token is generated outside & given in param.
+   * @param value, the generated token,
+   * @return INVALID_FORMAT, if the token is not 32 characters long.
+   */
   public function setToken($value){
     if(strlen($value) == 32){
       $this->token = $value;
