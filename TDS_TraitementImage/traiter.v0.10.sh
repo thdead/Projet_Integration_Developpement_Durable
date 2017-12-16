@@ -67,6 +67,9 @@ module_id=$(mysql -h 137.74.172.37 -ujon -proot emonitor -se "CALL findModuleIdF
 echo "Module ID = ----------------->   $module_id"
 
 
+valeurPrecedente=0
+valeurEcartMax=10
+
 #
 # BOUCLE DE TRAITEMENT
 #
@@ -90,7 +93,9 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg -crop 1135x189+33+239 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
 	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
-	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 300 -threshold 33% -density 300 -depth 8 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
+	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 300 -colorspace Gray -density 300 -depth 8 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
+
+	./otsuthresh /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
@@ -105,40 +110,63 @@ do
 
 	rmSpaceOutput=$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt | tr -d ' ')
 	echo "$rmSpaceOutput" > /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+
+
+	# Pour la comparaison de la valeur actuelle avec le précédent	
+	valeurActuelle=$(cat home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt)	
+	echo "Valeur précédente = ----------------->   $valeurPrecedente"	
+	echo "Valeur actuelle = ----------------->   $valeurActuelle"
+
+
+	if [ "$valeurActuelle" -gt "$valeurPrecedente" ]
+	then		
+		if [ $((valeurPrecedente + valeurEcartMax)) -lt "$valeurActuelle" ]
+		then 
+			# REMPLACER LA VALEUR PRECEDENTE PAR L'ACTUELLE
+			valeurPrecedente=$valeurActuelle
 	
 
-	# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
-	echo " $hostname" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
-	# NOTER LA DATE-HEURE DE LA PRISE
-	echo " $DATE" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+			# NOTER LE NOM DU LOCATAIRE (ON NOMME LA MACHINE A SON NOM)	
+			echo " $hostname" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+			# NOTER LA DATE-HEURE DE LA PRISE
+			echo " $DATE" >> /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 
-	# GESTION DES ESPACES INUTILES / FACILITER POUR INSERT BDD
-	contenuFichier="$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt)"
-	contenuFichierSansEspaces="$(echo -e $contenuFichier | tr -d '\v')"
-	echo $contenuFichierSansEspaces > /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
-	cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+			# GESTION DES ESPACES INUTILES / FACILITER POUR INSERT BDD
+			contenuFichier="$(cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt)"
+			contenuFichierSansEspaces="$(echo -e $contenuFichier | tr -d '\v')"
+			echo $contenuFichierSansEspaces > /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
+			cat /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt
 
-	# INSERTION DES DONNEES DANS LA BDD
-	inputfile="/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt"
-	cat $inputfile >> "/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/backupFile.txt"
-	cat $inputfile | while read compteur nom heure; do
-		echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
-	done | mysql -h 137.74.172.37 -ujon -proot emonitor;
+			# INSERTION DES DONNEES DANS LA BDD
+			inputfile="/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt"
+			cat $inputfile >> "/home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/backupFile.txt"
+			cat $inputfile | while read compteur nom heure; do
+				echo "INSERT INTO Control (Me_id, Mod_id, Con_measure, Con_time, Con_image) VALUES ('$meter_id', '$module_id', '$compteur', '$heure', '$imageATraiter');"
+			done | mysql -h 137.74.172.37 -ujon -proot emonitor;
 
-	# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
-	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.txt
-	mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.tif
+			# DEPLACEMENT DES FICHIERS DANS UN DOSSIER D'ARCHIVAGE
+			mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/output-$DATE.txt /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.txt
+			mv /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/Archives/$DATE.tif
+	
+			# RELANCER LA PRISE TOUTES LES MINUTES
+			sleep 60
+		else
+			# RELANCER LA CAPTURE			
+			echo "C'EST PAS POSSIBLE"
+			sleep 5		
+		fi
+	else	
+		# RELANCER LA CAPTURE	
+		sleep 5	
+	fi
+	
 
 	# POUR QUITTER LE LOGICIEL
-	read -t 5 -p "\nStopper le logiciel ? " -e -i "1" RDVALUE
+	read -t 2 -p "\nStopper le logiciel ? " -e -i "1" RDVALUE
 	if [ $RDVALUE = "1" ]
 	then 
 		echo "Logiciel quitté"
 		exit 0
 	fi
 	#
-	
-	# RELANCER LA PRISE TOUTES LES MINUTES
-	sleep 60
-	
 done
