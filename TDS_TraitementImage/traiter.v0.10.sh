@@ -95,7 +95,7 @@ do
 	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
 	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 300 -colorspace Gray -density 300 -depth 8 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
-	./otsuthresh /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
+	./home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/otsuthresh /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 
 	# GENERATION DU NUMERO DE COMPTEUR
