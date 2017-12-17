@@ -93,7 +93,7 @@ do
 	# SOLUTION OK !!!! convert reel8.jpg -crop 1600x260+343+1750 reel8.cropMagick.jpg
 	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcam.jpg -crop 1135x189+33+239 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg
 	imageATraiter=$(base64 /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg)
-	sleep(1)
+	sleep 1
 	convert /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/captureWebcamCrop.jpg -resize 300 -colorspace Gray -density 300 -depth 8 -negate -strip -background white -alpha off /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
 
 	./home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/otsuthresh /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif /home/pi/Projet_Integration_Developpement_Durable/TDS_TraitementImage/out-$DATE.tif
