@@ -18,3 +18,8 @@ Notre projet se base principalement sur le monitoring des consommations électri
 Afin de capturer et de traiter les images des compteurs électriques, d'eau et de gaz, nous utilisons un OCR programmé en Shell Script. La version finale de celui-ci se trouve dans le dossier [TDS_Traitement de signal]( https://github.com/jonathannoel/Projet_Integration_Developpement_Durable/tree/master/TDS_TraitementImage)et se nomme [traiter.v0.9.sh](https://github.com/jonathannoel/Projet_Integration_Developpement_Durable/blob/master/TDS_TraitementImage/traiter.v0.9.sh) pour une utilisation dans un linux et [traiter.v0.10.sh](https://github.com/jonathannoel/Projet_Integration_Developpement_Durable/blob/master/TDS_TraitementImage/traiter.v0.10.sh) pour une utilisation sur un Raspberry Pi, par exemple.    
 
 
+## Site web
+
+Le site web a été implémenté en language HTML5, Css3, Php. Si vous disposez des outils permettant de lancer un site web côté serveur, vous n'aurez aucune difficulté à faire fonctionner Emonitor en local. 
+
+Des tests unitaires sont de même implémentés dans le dossier 
