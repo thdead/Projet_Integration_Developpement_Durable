@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# AUTEUR : NOËL Jonathan, LAGACHE Jordan
+# AUTEURS : NOËL Jonathan, LAGACHE Jordan
 # 
 # COLLABORATEURS : 
 #   MEYER Nathan, EEROLA Juhani, MUTEBA Jean-Luc, RENARD Arnaud
