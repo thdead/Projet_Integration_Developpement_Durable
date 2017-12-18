@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #
-# AUTEUR : NOËL Jonathan
+# AUTEUR : NOËL Jonathan, LAGACHE Jordan
 # 
 # COLLABORATEURS : 
-#   LAGACHE Jordan, MEYER Nathan, EEROLA Juhani, MUTEBA Jean-Luc, RENARD Arnaud
+#   MEYER Nathan, EEROLA Juhani, MUTEBA Jean-Luc, RENARD Arnaud
 #
 #
 # Dans le cadre du Projet d intégration organisé par l EPHEC-Louvain-la-Neuve
